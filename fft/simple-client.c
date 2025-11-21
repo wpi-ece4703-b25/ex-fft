@@ -37,14 +37,15 @@ int process (jack_nframes_t nframes, void *arg) {
   inright  = jack_port_get_buffer (input_port_right, nframes);
   outright = jack_port_get_buffer (output_port_right, nframes);
 
-  for (int i=0; i<nframes; i++)
+  for (int i=0; i<FFTSIZE; i++)
     input[i] = 0.05 * inleft[i];
 
   fft_execute(fp);
 
-  for (int i=0; i<nframes; i++) {
+  for (int i=0; i<FFTSIZE; i++) {
     outleft[i]  = cabsf(output[i]);
-    outright[i] = (i == 0) ? 2.0 : (i == 512) ? -2.0 : inleft[i] - 2; // create a sync
+    //    outright[i] = (i == 0) ? 2.0 : (i == 512) ? -2.0 : inleft[i] - 2; // create a sync
+    outright[i] = inleft[i] - 2; // create a sync
   }
 
   
